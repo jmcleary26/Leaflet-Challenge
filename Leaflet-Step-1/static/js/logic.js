@@ -18,24 +18,30 @@ function generateRadius(magnitude) {
 
 function generateColor(depth) {
   switch (true) {
-    case depth > 10:
-      return "#32CD32";
-    case depth > 8:
+    case depth <= -10:
       return "#00FF00";
-    case depth > 6:
-      return "#7CFC00";
-    case depth > 4:
-      return "#7FFF00";
-    case depth > 2:
+    case depth <= 10:
       return "#ADFF2F";
+    case depth <= 30:
+      return "#FFFF00";
+    case depth <= 50:
+      return "#FFA500";
+    case depth <= 70:
+      return "#FF6347";
+    case depth <= 90:
+      return "#FF0000";
+      case depth >= 90:
+      return "#FF0000";
+    default:
+      return "#7CFC00";
   }
 
 }
 
-// function onEachFeature(popup) {
-//   popup.bindPopUp("<h3>" + popup.features.properties.place +
-//     "</h3><hr><p>" + new Date(popup.features.properties.time) + "</p>");
-// }
+function onEachFeature(popup) {
+  popup.bindPopUp("<h3>" + popup.features.properties.place +
+    "</h3><hr><p>" + new Date(popup.features.properties.time) + "</p>");
+}
 
 // Getting our GeoJSON data
 d3.json(link).then(function (data) {
@@ -50,15 +56,15 @@ d3.json(link).then(function (data) {
       return {
         color: '#1c1c1c',
         fillColor: generateColor(earthquake.geometry.coordinates[2]),
-        opacity: 0.8,
+        opacity: 0.6,
         fillOpacity: 0.8,
         radius: generateRadius(earthquake.properties.mag)
       }
     },
-    // onEachFeature: function (earthquake, popup) {
-    //   popup.bindPopup("Magnitude:" + earthquake.properties.mag + "<br>Location:" + feature.properties.place);
+    onEachFeature: function (earthquake, popup) {
+      popup.bindPopup("Magnitude:" + earthquake.properties.mag + "<br>Depth:" + earthquake.geometry.coordinates[2] +"<br>Location:" + earthquake.properties.place);
 
-    // }
+    }
   }).addTo(myMap);
 
   var legend = L.control({
@@ -67,8 +73,9 @@ d3.json(link).then(function (data) {
 
   legend.onAdd = function(myMap) {
     var div = L.DomUtil.create('div', 'info legend');
-    labels = ['<strong>Categories</strong>'],
-    categories = ['>10', '>8', '>6', '>4', '>2', 'Other'];
+    labels = ['<strong>Earthquake Depth</strong>'],
+    // categories = [10, 8, 6, 4, 2];
+    categories = [-10,10,30,50,70,90];
 
     for (var i = 0; i < categories.length; i++) {
       div.innerHTML += 
