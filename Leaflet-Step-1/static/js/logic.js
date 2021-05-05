@@ -12,6 +12,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 // Use this link to get the GeoJSON data.
 var link = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
+// Create functions
 function generateRadius(magnitude) {
   return magnitude * 3
 }
@@ -47,9 +48,7 @@ function onEachFeature(popup) {
 d3.json(link).then(function (data) {
   // Creating a GeoJSON layer with the retrieved data
   L.geoJson(data, {
-    // onEachFeature: onEachFeature,
     pointToLayer: function (earthquake, latlong) {
-      //console.log(latlong);
       return L.circleMarker(latlong);
     },
     style: function (earthquake, latlong) {
@@ -75,7 +74,6 @@ d3.json(link).then(function (data) {
   legend.onAdd = function(myMap) {
     var div = L.DomUtil.create('div', 'info legend');
     labels = ['<strong>Depth</strong>'],
-    // categories = [10, 8, 6, 4, 2];
     categories = [-10,10,30,50,70,90];
 
     for (var i = 0; i < categories.length; i++) {
