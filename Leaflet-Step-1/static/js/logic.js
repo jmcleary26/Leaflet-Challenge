@@ -67,13 +67,14 @@ d3.json(link).then(function (data) {
     }
   }).addTo(myMap);
 
+  // Creating the legend for bubble color based on depth
   var legend = L.control({
     position: "bottomright"
   });
 
   legend.onAdd = function(myMap) {
     var div = L.DomUtil.create('div', 'info legend');
-    labels = ['<strong>Earthquake Depth</strong>'],
+    labels = ['<strong>Depth</strong>'],
     // categories = [10, 8, 6, 4, 2];
     categories = [-10,10,30,50,70,90];
 
